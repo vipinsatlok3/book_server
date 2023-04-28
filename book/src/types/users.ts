@@ -4,6 +4,7 @@ export interface IUser {
   role: string;
   number: number | string;
   password: string;
+  count: number;
 }
 
 export interface IUserLogin {

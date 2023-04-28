@@ -18,9 +18,19 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(req: NextRequest) {
   await connectDB();
+  const user: IUser = JSON.parse(req.cookies.get("user")?.value as string) as IUser;
+  if (!user._id) return NextResponse.json({ success: false, error: "login first" }, { status: 401 });
 
   try {
-    const books = await bookModel.find();
+
+    let books
+
+    if (user.role === "admin") {
+      books = await bookModel.find();
+    } else {
+      books = await bookModel.find({ userId: user._id });
+    }
+
     return NextResponse.json({ success: true, books }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ success: false, error }, { status: 500 });

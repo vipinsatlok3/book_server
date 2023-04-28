@@ -1,5 +1,5 @@
 import List from "@/components/List";
-import { IBooks } from "@/types/books";
+import { IBooksStatus } from "@/types/books";
 
 export const metadata = {
   title: "Books",
@@ -7,10 +7,7 @@ export const metadata = {
 
 export default async function Books() {
   const res = await fetch("https://zzdc92-3000.csb.app/api/books");
-  const { books, success } = (await res.json()) as {
-    success: boolean;
-    books: IBooks[];
-  };
+  const { books, success } = (await res.json()) as IBooksStatus
 
   if (!books) throw new Error("no data found");
   if (!success) throw new Error();

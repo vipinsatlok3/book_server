@@ -20,12 +20,13 @@ export default async function Users() {
       <h1 className="text-xl font-semibold"> Users List</h1>
       {users.length &&
         users?.map((item, index) => {
+
           return (
             <List
               name={item.name}
               _id={item._id}
               subname={item.number + " - " + item.password}
-              count={0}
+              count={item.count}
               index={index}
               key={item._id}
             />
