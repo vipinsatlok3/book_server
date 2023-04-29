@@ -1,0 +1,1 @@
+export const { MONGO_URI, JWT_SECRET, BASE_URL } = process.env
