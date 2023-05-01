@@ -5,17 +5,22 @@ import auth from "./routes/auth";
 import users from "./routes/users";
 import books from "./routes/books";
 import { IUser } from "./types/users";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+app.use(
+  cors({
+    origin: "*" || ["*"],
+  })
+);
 
 connectDB();
 
 app.get("/", (req: Request, res: Response) => {
   res.send("Hello World");
 });
-
 
 declare global {
   namespace Express {

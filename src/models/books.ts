@@ -12,7 +12,7 @@ const schema = new mongoose.Schema(
     },
     date: {
       type: Date,
-      required: new Date(),
+      default: new Date(),
     },
     books: [
       {

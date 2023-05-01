@@ -17,24 +17,21 @@ export const login = async (
 
   try {
     const user = await userModel.findOne({ number, password });
-    console.log({ user });
+
     if (!user) {
       return next(new ErrorHandler().notAccept("invalid credentials"));
     }
 
-    const token = sign({ id: user._id }, JWT_SECRET as string, {
+    const token = sign({ _id: user._id }, JWT_SECRET as string, {
       expiresIn: "365d",
     });
-
-    console.log({ token });
 
     res
       .status(200)
       .setHeader("Authorization", `Bearer ${token}`)
       .json({ token });
   } catch (err: any) {
-    console.log("call error");
-    return new ErrorHandler().serverError(err);
+    return next(new ErrorHandler().serverError(err));
   }
 };
 
@@ -47,32 +44,27 @@ export const isAuthenticated = async (
   const token = authHeader && authHeader.split(" ")[1];
 
   if (!token) {
-    return new ErrorHandler().notAccept("no token provided");
+    return next(new ErrorHandler().notAccept("no token provided"));
   }
 
   const decoded = (await verify(token, JWT_SECRET as string)) as IUser;
-
   try {
     const user = (await userModel.findById(decoded._id)) as IUser;
-    if (!user) {
-      return new ErrorHandler().unAuthrized();
-    }
 
+    if (!user) {
+      return next(new ErrorHandler().unAuthrized());
+    }
 
     req.user = user;
     next();
   } catch (err: any) {
-    return new ErrorHandler().serverError(err);
+    return next(new ErrorHandler().serverError(err));
   }
 };
 
-export const isAdmin = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
+export const isAdmin = (req: Request, res: Response, next: NextFunction) => {
   if (req.user.role !== "admin") {
-    return new ErrorHandler().unAuthrized("this user is not admin");
+    return next(new ErrorHandler().serverError("you are not admin"));
   }
   next();
 };

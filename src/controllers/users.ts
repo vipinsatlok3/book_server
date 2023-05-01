@@ -92,6 +92,7 @@ export const getUser = async (
 
 export const getMe = (req: Request, res: Response, next: NextFunction) => {
   try {
+    console.log("user", req.user)
     res.status(200).json({ success: true, user: req.user });
   } catch (err: any) {
     return next(new ErrorHandler().serverError(err));

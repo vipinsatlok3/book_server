@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { IBook } from "../types/books";
 import ErrorHandler from "../utils/errorHandler";
 import bookModel from "../models/books";
-import userModel from "../models/users";
-import { IUser } from "../types/users";
 
 export const addBook = async (
   req: Request,
@@ -16,7 +14,7 @@ export const addBook = async (
   }
 
   try {
-    const book = await bookModel.create({ place, date, books });
+    const book = await bookModel.create({ place, userId: req.user._id, date, books });
     res.status(201).json({ success: true, book });
   } catch (err: any) {
     return next(new ErrorHandler().serverError(err));
@@ -56,7 +54,7 @@ export const getAllBookOfAnyUser = async (
   next: NextFunction
 ) => {
   try {
-    const books = await bookModel.find({ userid: req.user._id });
+    const books = await bookModel.find({ userId: req.user._id });
     res.status(200).json({ success: true, books });
   } catch (err: any) {
     return next(new ErrorHandler().serverError(err));

@@ -14,8 +14,8 @@ const route = Router();
 route.post("/", isAuthenticated, addBook);
 route.patch("/:id", isAuthenticated, updateBook);
 route.delete("/:id", isAuthenticated, deleteBook);
-route.get("/", isAuthenticated, getBooks);
-route.get("/:id", isAuthenticated, getBook);
+route.get("/", isAuthenticated, isAdmin, getBooks);
 route.get("/book", isAuthenticated, getAllBookOfAnyUser);
+route.get("/:id", isAuthenticated, getBook);
 
 export default route;
