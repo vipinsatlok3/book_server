@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const books_1 = require("../controllers/books");
+const auth_1 = require("../controllers/auth");
+const route = (0, express_1.Router)();
+route.post("/", auth_1.isAuthenticated, books_1.addBook);
+route.patch("/:id", auth_1.isAuthenticated, books_1.updateBook);
+route.delete("/:id", auth_1.isAuthenticated, books_1.deleteBook);
+route.get("/", auth_1.isAuthenticated, auth_1.isAdmin, books_1.getBooks);
+route.get("/book", auth_1.isAuthenticated, books_1.getAllBookOfAnyUser);
+route.get("/:id", auth_1.isAuthenticated, books_1.getBook);
+exports.default = route;
